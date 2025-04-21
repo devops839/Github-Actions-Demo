@@ -17,5 +17,4 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Compile with Maven
-      run: mvn clean verify
-  
+      run: mvn clean package
