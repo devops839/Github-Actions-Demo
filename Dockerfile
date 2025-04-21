@@ -1,14 +1,23 @@
-# Stage 1: Build the application
-FROM maven:3.8-openjdk-25-slim AS build
-WORKDIR /app
-COPY pom.xml .
-RUN mvn dependency:go-offline
-COPY src ./src
-RUN mvn clean package -DskipTests
+# Use a base image with Java
+FROM openjdk:17-jdk-alpine
 
-# Stage 2: Create the production image
-FROM eclipse-temurin:25-jre-alpine
+# Set working directory
 WORKDIR /app
-COPY --from=build /app/target/travel-website-0.0.1-SNAPSHOT.jar app.jar
+
+# Copy the pom.xml file into the container
+COPY pom.xml .
+
+# Download dependencies (optional step)
+RUN ./mvnw dependency:go-offline
+
+# Copy the entire source code into the container
+COPY src /app/src
+
+# Build the Spring Boot application
+RUN ./mvnw clean package -DskipTests
+
+# Expose the port the application will run on (default Spring Boot port)
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+# Run the Spring Boot application
+CMD ["java", "-jar", "target/travel-website-0.0.1-SNAPSHOT.jar"]
