@@ -16,7 +16,7 @@
     </parent>
 
     <properties>
-        <java.version>25</java.version>
+        <java.version>17</java.version>
         <sonar.host.url>http://localhost:9000</sonar.host.url>
         <sonar.projectKey>travel-website</sonar.projectKey>
         <sonar.organization>travel</sonar.organization>
