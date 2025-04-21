@@ -18,3 +18,17 @@ jobs:
         cache: maven
     - name: Compile with Maven
       run: mvn clean package
+      
+    - name: Upload JAR artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: built-app
+        path: target/*.jar
+
+    - name: Run the app
+      run: |
+        nohup java -jar target/*.jar &
+        sleep 10
+
+    - name: Test application is running
+      run: curl http://localhost:8080
