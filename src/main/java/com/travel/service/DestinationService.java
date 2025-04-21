@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DestinationService {
@@ -18,6 +19,11 @@ public class DestinationService {
     }
 
     public Destination getDestinationById(Long id) {
-        return destinationRepository.findById(id).orElse(null);
+        Optional<Destination> destination = destinationRepository.findById(id);
+        return destination.orElse(null);
+    }
+
+    public void saveDestination(Destination destination) {
+        destinationRepository.save(destination);
     }
 }

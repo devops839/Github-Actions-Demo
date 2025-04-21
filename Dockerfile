@@ -1,23 +1,13 @@
-# Use a base image with Java
-FROM openjdk:17-jdk-alpine
+# Stage 1: Build the application with Maven
+FROM maven:3.8.6-openjdk-17 AS builder 
+WORKDIR /app 
+COPY pom.xml . 
+COPY src ./src 
+RUN mvn clean package -DskipTests
 
-# Set working directory
-WORKDIR /app
+# Stage 2: Create the runtime image
 
-# Copy the pom.xml file into the container
-COPY pom.xml .
-
-# Download dependencies (optional step)
-RUN ./mvnw dependency:go-offline
-
-# Copy the entire source code into the container
-COPY src /app/src
-
-# Build the Spring Boot application
-RUN ./mvnw clean package -DskipTests
-
-# Expose the port the application will run on (default Spring Boot port)
-EXPOSE 8080
-
-# Run the Spring Boot application
-CMD ["java", "-jar", "target/travel-website-0.0.1-SNAPSHOT.jar"]
+FROM openjdk:17-jdk-slim
+WORKDIR /app COPY --from=builder /app/target/travel-website-0.0.1-SNAPSHOT.jar /app/app.jar 
+EXPOSE 8080 
+CMD ["java", "-jar", "/app/app.jar"]

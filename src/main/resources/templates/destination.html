@@ -1,22 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Destinations</title>
-    <link rel="stylesheet" href="/static/css/styles.css">
+    <title>Destination Details</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <h1>Available Destinations</h1>
-    <ul>
-        <th:block th:each="destination : ${destinations}">
-            <li>
-                <h3 th:text="${destination.name}"></h3>
-                <p th:text="${destination.description}"></p>
-                <p th:text="${destination.price}"></p>
-                <img th:src="${destination.imageUrl}" alt="destination image"/>
-            </li>
-        </th:block>
-    </ul>
+    <header>
+        <h1 th:text="${destination.name}"></h1>
+        <nav>
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/login}">Login</a>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="card">
+            <h3 th:text="${destination.name}"></h3>
+            <p th:text="${destination.description}"></p>
+            <p>Price: $<span th:text="${destination.price}"></span></p>
+            <a th:href="@{/booking/{id}(id=${destination.id})}">Book Now</a>
+        </div>
+    </div>
 </body>
 </html>
